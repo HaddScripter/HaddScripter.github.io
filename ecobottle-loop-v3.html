@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>EcoBottle Loop</title>
+<style>
+:root{--bg:#F8FAF7;--mist:#EEF3EE;--card:#fff;--ink:#202A26;--mut:#5F6D66;--ln:#DCE6DF;--ac:#18A878;--em:#0B7A58;--mint:#A7F3D0;--tq:#4CCDB5;--btn:#123C32;--btnt:#fff;--nb:rgba(255,255,255,.82);box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B1512;--mist:#14231E;--card:#101D18;--ink:#E9F3EE;--mut:#95A89E;--ln:#24362F;--em:#6FE3B5;--btn:#A7F3D0;--btnt:#0B1512;--nb:rgba(16,29,24,.85)}}
+:root[data-theme="dark"]{--bg:#0B1512;--mist:#14231E;--card:#101D18;--ink:#E9F3EE;--mut:#95A89E;--ln:#24362F;--em:#6FE3B5;--btn:#A7F3D0;--btnt:#0B1512;--nb:rgba(16,29,24,.85)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--bg)}
+body{font:15.5px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink)}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0;transition:transform .12s}
+button:active{transform:scale(.97)}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+#app{max-width:440px;height:100%;margin:0 auto;display:flex;flex-direction:column;position:relative;overflow:hidden}
+main{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 20px 20px}
+main.in{animation:in .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.top{display:flex;justify-content:space-between;align-items:center;min-height:44px;margin-bottom:8px}
+.lg{display:flex;align-items:center;gap:8px;font-weight:700}
+.lg i{width:30px;height:30px;border-radius:10px;background:var(--btn);color:var(--btnt);display:grid;place-items:center}
+.ib{width:44px;height:44px;border-radius:50%;background:var(--mist);display:grid;place-items:center}
+h1{font-size:clamp(28px,8.5vw,36px);line-height:1.05;letter-spacing:-1.2px;margin:6px 0 4px;overflow-wrap:anywhere}
+h2{font-size:19px;line-height:1.2;margin:8px 0 4px;letter-spacing:-.3px}
+h3{margin:0 0 8px;font-size:20px}
+.sub,.mut{color:var(--mut)}.sub{margin:0}
+.note{font-size:12.5px;color:var(--mut);margin:8px 2px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:22px;padding:16px;margin-top:12px}
+.card p{margin:4px 0 8px}
+.row{display:flex;align-items:center;gap:12px;justify-content:space-between}
+.pill{display:inline-block;background:var(--mist);color:var(--em);font-weight:600;font-size:12.5px;padding:3px 10px;border-radius:99px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;border-radius:16px;background:var(--btn);color:var(--btnt);font-weight:600;margin-top:12px;text-decoration:none;padding:0 16px;text-align:center}
+.btn.g{background:var(--mist);color:var(--ink)}.btn:disabled{opacity:.5;cursor:default}
+.bar{height:8px;border-radius:5px;background:var(--mist);overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--tq),var(--ac));border-radius:5px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.hero{display:block;width:100%;max-width:340px;margin:4px auto 0}
+.flow{fill:none;stroke:var(--ac);stroke-width:3;stroke-dasharray:3 9;stroke-linecap:round;animation:fl 6s linear infinite}
+@keyframes fl{to{stroke-dashoffset:-48}}
+.nd{cursor:pointer}.nd circle{fill:var(--card);stroke:var(--ln);stroke-width:2}.nd g{stroke:var(--ink)}
+.nd.on circle{fill:var(--btn);stroke:var(--mint);stroke-width:3}.nd.on g{stroke:var(--btnt)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:14px;border-top:1px solid var(--ln);border-bottom:1px solid var(--ln)}
+.stats div{padding:14px 4px;text-align:center}.stats b{display:block;font-size:30px;line-height:1;letter-spacing:-1px}.stats span{font-size:12.5px;color:var(--mut)}
+.seg{display:flex;gap:4px;background:var(--mist);padding:4px;border-radius:16px;margin:10px 0}
+.seg button{flex:1;min-height:40px;border-radius:12px;font-weight:600;font-size:14px;color:var(--mut)}
+.seg .on{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(0,40,30,.12)}
+.scn{position:relative;height:290px;border-radius:26px;background:linear-gradient(160deg,#123C32,#0c2a23 60%,#18A878);display:grid;place-items:center;overflow:hidden}
+.scn i{position:absolute;width:42px;height:42px;border:0 solid #A7F3D0;border-radius:10px}
+.c1{top:44px;left:34px;border-width:4px 0 0 4px!important}.c2{top:44px;right:34px;border-width:4px 4px 0 0!important}.c3{bottom:24px;left:34px;border-width:0 0 4px 4px!important}.c4{bottom:24px;right:34px;border-width:0 4px 4px 0!important}
+.tg{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.16);color:#fff;font-size:12.5px;padding:4px 12px;border-radius:99px;white-space:nowrap}
+.ln{position:absolute;left:34px;right:34px;top:46px;height:3px;background:#A7F3D0;box-shadow:0 0 14px #A7F3D0;opacity:0}
+.go .ln{opacity:1;animation:sl 1.2s ease-in-out}
+@keyframes sl{0%{top:46px}50%{top:240px}100%{top:46px}}
+.opt{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:13px 14px;margin-top:8px;border-radius:14px;background:var(--mist);min-height:48px}
+.opt.ok{background:#A7F3D0;color:#06281f}.opt.no{background:#FBD5D0;color:#5b1008}.opt.ok:after{content:"✓"}.opt.no:after{content:"✕"}
+.ex{background:var(--mist);border-radius:14px;padding:12px;margin-top:12px!important}
+.li{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:12px 0;border-top:1px solid var(--ln)}
+.li>span:nth-child(2){flex:1;min-width:0}.li small{display:block;color:var(--mut);font-size:12.5px}
+.li.sel{background:var(--mist);margin:0 -10px;padding:12px 10px;border-radius:14px;width:calc(100% + 20px)}
+.map{display:block;width:100%;border-radius:22px;background:var(--mist)}
+.pin{cursor:pointer}
+.in{width:100%;height:50px;border-radius:14px;border:2px solid var(--ln);background:var(--card);color:var(--ink);font:inherit;font-size:16px;padding:0 14px}
+.chips{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}.chip{padding:0 16px;min-height:40px;border-radius:99px;background:var(--mist);font-weight:600}.chip.on{background:var(--btn);color:var(--btnt)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.grid2 .card{margin:0;display:flex;flex-direction:column;gap:6px}.grid2 .card p{flex:1;font-size:13px;color:var(--mut)}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;text-align:center;font-size:11.5px}.grid4 small{display:block;line-height:1.2}
+.lk{opacity:.9}
+.hl{list-style:none;margin:0;padding:0}.hl li{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--ln)}.hl small{display:block;color:var(--mut);font-size:12.5px}.hl b{white-space:nowrap}
+.av{width:76px;height:76px;border-radius:26px;background:var(--btn);color:var(--btnt);display:grid;place-items:center;font-size:32px;font-weight:700}
+.sw{width:52px;height:30px;border-radius:15px;background:var(--ln);position:relative;flex:none}.sw i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw[aria-checked=true]{background:var(--em)}.sw[aria-checked=true] i{transform:translateX(22px)}
+.ch text{fill:var(--mut);font-size:10px}
+details{border-top:1px solid var(--ln);padding:10px 0}summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;min-height:30px;align-items:center}
+summary::-webkit-details-marker{display:none}summary:after{content:"+";font-size:22px}details[open] summary:after{content:"−"}details p{margin:6px 0 2px;color:var(--mut)}
+.dng{color:#B42318;background:none;border:2px solid #B4231855}
+.sr{position:absolute;left:-9999px}
+nav{position:relative;display:grid;grid-template-columns:repeat(5,1fr);margin:0 12px 10px;padding:6px;border-radius:28px;background:var(--nb);border:1px solid var(--ln);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+nav i{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px)/5);transform:translateX(calc(var(--t,0)*100%));transition:transform .35s cubic-bezier(.3,.8,.3,1)}
+nav i:before{content:"";position:absolute;inset:0 3px;border-radius:22px;background:var(--mist)}
+nav button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:54px;font-size:10.5px;color:var(--mut)}
+nav button.on{color:var(--ink);font-weight:700}
+#md{position:fixed;inset:0;z-index:50;background:rgba(8,22,17,.55);display:flex;align-items:flex-end;justify-content:center}
+#md[hidden]{display:none}
+.sh{width:100%;max-width:440px;background:var(--card);border-radius:28px 28px 0 0;padding:22px 20px calc(18px + env(safe-area-inset-bottom,0px));animation:up .3s cubic-bezier(.2,.8,.2,1);max-height:88%;overflow:auto}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sh ul{padding-left:18px;margin:8px 0}.sh p{margin:0 0 6px}
+#tt{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);background:#123C32;color:#fff;padding:10px 16px;border-radius:16px;max-width:88%;text-align:center;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60}
+#tt.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".5" stop-color="#cfeee3" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".6"/></linearGradient>
+<linearGradient id="lq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A7F3D0"/><stop offset="1" stop-color="#18A878"/></linearGradient>
+<radialGradient id="ha"><stop offset="0" stop-color="#A7F3D0" stop-opacity=".85"/><stop offset="1" stop-color="#A7F3D0" stop-opacity="0"/></radialGradient>
+<clipPath id="bc"><path d="M22 0h16v14c0 8 14 12 14 30v92a14 14 0 0 1-14 14H22a14 14 0 0 1-14-14V44c0-18 14-22 14-30z"/></clipPath></defs></svg>
+<div id="app"><main id="m"></main><nav id="nv" aria-label="Navegació principal"></nav></div>
+<div id="md" hidden></div><div id="tt" role="status" aria-live="polite"></div>
+<script>
+(()=>{"use strict";
+const $=q=>document.querySelector(q),M=$('#m'),NV=$('#nv'),RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const esc=v=>String(v).replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
+/* ---------- regles centralitzades ---------- */
+const KEY='ecoloop-v2',R={scan:10,cap:5,quiz:5,step:100,dg:3,db:5,wg:10,wb:20,seed:150};
+const dn=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5),wn=()=>Math.floor((dn()+3)/7);
+const def=()=>({v:2,ask:0,name:'',earned:R.seed,spent:0,scans:0,dc:0,wc:0,H:[{t:Date.now(),k:'seed',d:'Punts inicials de demostració',p:R.seed}],days:{},qa:[],qp:[],bd:[],rw:[],seen:[],snd:1,th:'auto',dd:{d:0,s:0,b:0},ww:{w:0,s:0,b:0}});
+let S;try{S=Object.assign(def(),JSON.parse(localStorage.getItem(KEY)||'null')||{});if(S.v!=2)S=def();
+ const o=!localStorage.getItem(KEY)&&JSON.parse(localStorage.getItem('ecoloop-v1')||'null');if(o){S.name=String(o.name||'').slice(0,18);S.snd=o.snd===false?0:1;S.th=o.th||'auto'}}catch(e){S=def()}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const roll=()=>{if(S.dd.d!=dn())S.dd={d:dn(),s:0,b:0};if(S.ww.w!=wn())S.ww={w:wn(),s:0,b:0}};roll();
+const NM=['Llavor','Brot','Arrel','Bosc','Cicle'],lv=()=>Math.floor(S.earned/R.step)+1,nm=()=>NM[Math.min(lv(),5)-1],bal=()=>S.earned-S.spent;
+const stk=()=>{let d=dn(),n=0;if(!S.days[d])d--;while(S.days[d]){n++;d--}return n};
+const add=(k,d,p)=>{S.H.unshift({t:Date.now(),k,d,p});if(S.H.length>80)S.H.length=80;p>0?S.earned+=p:S.spent-=p};
+const applyTh=()=>{const r=document.documentElement;S.th=='auto'?r.removeAttribute('data-theme'):r.setAttribute('data-theme',S.th)};applyTh();
+/* ---------- dades de contingut ---------- */
+const P={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',rec:'<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/>',pin:'<path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/>',trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',bottle:'<path d="M10 2h4v3l1.5 3v12a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V8L10 5z"/>',truck:'<path d="M2 6h11v10H2zM13 9h4l4 4v3h-8"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',factory:'<path d="M3 21V10l6 4V10l6 4V6h6v15zM3 21h18"/>',leaf:'<path d="M4 20C4 9 11 4 20 4c0 9-5 16-16 16zM4 20l9-9"/>',chev:'<path d="M9 6l6 6-6 6"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/>',vol:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/>',mute:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/>',check:'<path d="M5 12l5 5 9-10"/>',book:'<path d="M2 4h7a3 3 0 0 1 3 3v14a2 2 0 0 0-2-2H2zM22 4h-7a3 3 0 0 0-3 3v14a2 2 0 0 1 2-2h8z"/>',star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',bag:'<path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',flame:'<path d="M12 2c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 2-4 2-7 2 1 3 2 4-5z"/>'};
+const ic=(n,w=22)=>`<svg viewBox="0 0 24 24" width="${w}" height="${w}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+const ST=[['Ús de l’ampolla','bottle','Una ampolla reutilitzable allarga la seva vida útil: com més vegades s’usa, menys envasos nous calen.'],['Recollida','truck','Quan una ampolla acaba la seva vida útil, cal retornar-la a un punt de recollida perquè no es perdi.'],['Classificació','rec','Cada material (cos, tap, etiqueta) se separa perquè es pugui tractar de la manera adequada.'],['Recuperació de materials','gear','El material classificat es neteja i es prepara per tornar a ser matèria primera.'],['Nova producció','factory','La matèria recuperada pot tornar a entrar en la fabricació de productes nous i el cicle es tanca.']];
+const GM=[['Ampolla de plàstic','Buida-la i, si cal, esbandeix-la. Després, segueix la recollida d’envasos del teu municipi.'],['Tap','Moltes localitats recomanen deixar-lo cargolat a l’ampolla perquè no es perdi. Comprova la norma local.'],['Etiqueta i embolcall','Si se separen fàcilment, treu-los. Si no, consulta què indica el teu servei de recollida.'],['Vidre','Normalment no es barreja amb els envasos de plàstic i té el seu propi contenidor.'],['Paper i cartró','Normalment van al contenidor de paper, nets i secs. Depèn de la zona.']];
+const QZ=[['Què és l’economia circular?',['Produir, usar i llençar','Reutilitzar i reciclar per mantenir els materials en ús','Comprar més cada any'],1,'Busca que els materials circulin el màxim de temps possible en lloc de convertir-se en residu.'],
+['Quina etapa del cicle vindria després de la recollida?',['La classificació dels materials','La compra de l’ampolla','El tancament del cicle'],0,'Primer es recull, després es classifica per materials i finalment es recuperen.'],
+['Per què se separen els materials?',['Per decorar','Perquè cada material es tracta de manera diferent','Perquè pesen més'],1,'Barrejats, els materials són més difícils de recuperar amb qualitat.'],
+['Què és millor per reduir envasos nous?',['Reutilitzar l’ampolla moltes vegades','Llençar-la després d’un ús','Comprar-ne una de diferent cada dia'],0,'Reutilitzar allarga la vida útil i redueix la necessitat de fabricar-ne de noves.'],
+['Les normes de reciclatge són iguals a tot arreu?',['Sí, són idèntiques','No, depenen de la infraestructura local','Només canvien als països grans'],1,'Cada municipi o regió organitza la seva recollida; per això convé consultar-ne les indicacions.'],
+['Què fa l’escàner d’aquesta app?',['Verifica productes reals','Simula una acció de demostració','Escaneja la teva cambra'],1,'És un mode de demostració acadèmic: no utilitza la càmera ni verifica res.'],
+['Quin és l’objectiu d’EcoBottle Loop?',['Ajudar a tancar el cicle de producció i consum','Només acumular punts','Substituir els punts de recollida'],0,'Els punts són un incentiu; l’objectiu és fer visible i facilitar el cicle circular.']];
+const SH=['M28 3l22 12v26L28 53 6 41V15z','M28 3a25 25 0 1 1 0 50 25 25 0 0 1 0-50z','M28 3l25 25-25 25L3 28z','M9 8h38v27c0 10-19 19-19 19S9 45 9 35z'],CO=['#18A878','#0B7A58','#123C32','#2AA9A0'];
+const bdg=(g,sh,on)=>`<svg viewBox="0 0 56 56" width="56" height="56" aria-hidden="true"><path d="${SH[sh]}" fill="${on?CO[sh]:'#9AA79F'}" opacity="${on?1:.4}"/><path d="${SH[sh]}" fill="url(#gl)" opacity=".45"/><g transform="translate(16 16)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${P[on?g:'lock']}</g></svg>`;
+const B=[['primera','Primera acció','Registra la teva primera acció de demostració.','bottle',0,()=>S.scans>=1],['dia','Dia complet','Completa el repte diari.','check',1,()=>S.dc>0],['ratxa','Ratxa de 3 dies','Registra activitat tres dies seguits.','flame',2,()=>stk()>=3],['quiz','Ment circular','Respon bé 5 preguntes del quiz.','book',3,()=>S.qp.length>=5],['n2','Nivell 2','Arriba al nivell 2.','star',0,()=>lv()>=2],['cicle','Explorador del cicle','Consulta les 5 etapes del cicle.','rec',1,()=>S.seen.length>=5],['setm','Setmana activa','Completa el repte setmanal.','trophy',2,()=>S.wc>0],['col','Col·leccionista','Bescanvia 2 recompenses.','bag',3,()=>S.rw.length>=2]];
+const RW=[['ins','Insígnia digital Loop','Símbol digital per al teu perfil.',50,'leaf',1],['guia','Guia de materials Plus','Fitxes addicionals de materials.',80,'book',3],['bossa','Bossa reutilitzable','Exemple de recompensa física.',120,'bag',0],['arbre','Plantem junts','Exemple de col·laboració solidària.',150,'star',2]];
+const MP=[{n:'Punt d’exemple 1',z:'Ciutat Vella',c:['Ampolles','Taps'],x:110,y:96},{n:'Punt d’exemple 2',z:'Eixample',c:['Ampolles'],x:165,y:190},{n:'Punt d’exemple 3',z:'Sant Antoni',c:['Taps'],x:300,y:92}];
+/* ---------- so ---------- */
+let AC;const ctx=()=>{try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state=='suspended')AC.resume();return AC}catch(e){return null}};
+const tone=(f,t=0,d=.12,ty='sine',v=.08)=>{if(!S.snd)return;const c=ctx();if(!c)return;try{const o=c.createOscillator(),g=c.createGain(),n=c.currentTime+t;o.type=ty;o.frequency.setValueAtTime(f,n);g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(g);g.connect(c.destination);o.start(n);o.stop(n+d+.02)}catch(e){}};
+const SFX={tick:()=>tone(880,0,.05,'triangle',.06),pop:()=>tone(620,0,.07),ok:()=>{tone(523,0,.12);tone(659,.1,.12);tone(784,.2,.22)},lvl:()=>[523,659,784,1047].forEach((f,i)=>tone(f,i*.09,.22,'triangle',.1)),bad:()=>{tone(220,0,.18,'sawtooth',.05);tone(165,.14,.25,'sawtooth',.05)}};
+const sfx=k=>SFX[k]&&SFX[k]();
+/* ---------- estat de la interfície ---------- */
+let tab=0,si=0,rs=0,ws=0,qv=Math.min(S.qa.length,QZ.length),sel=-1,fl='Tots',q='',busy=0,MB=[],tt;const PV={};
+const toast=t=>{const e=$('#tt');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),Math.min(5000,1800+t.length*35))};
+const cm=()=>{$('#md').hidden=true;$('#md').innerHTML=''};
+const modal=(h,b)=>{MB=b;const e=$('#md');e.innerHTML=`<div class="sh" role="dialog" aria-modal="true" aria-labelledby="mt">${h}${b.map((x,i)=>`<button class="btn${x[2]?' g':''}" data-m="${i}">${x[0]}</button>`).join('')}</div>`;e.hidden=false;const f=$('#ni')||e.querySelector('.btn');f&&f.focus()};
+const fmt=t=>new Date(t).toLocaleString('ca',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+const gr=()=>{const h=new Date().getHours();return h<13?'Bon dia':h<20?'Bona tarda':'Bona nit'};
+const check=()=>{const nb=B.filter(b=>!S.bd.includes(b[0])&&b[5]());nb.forEach(b=>S.bd.push(b[0]));if(nb.length){toast('Insígnia desbloquejada: '+nb.map(b=>b[1]).join(', '));sfx('lvl')}};
+/* ---------- components ---------- */
+const BP='M22 0h16v14c0 8 14 12 14 30v92a14 14 0 0 1-14 14H22a14 14 0 0 1-14-14V44c0-18 14-22 14-30z';
+const bt=p=>`<rect x="20" y="-9" width="20" height="11" rx="3" fill="#123C32"/><path d="${BP}" fill="#EAF6F0" fill-opacity=".55"/><rect x="0" y="${(150*(1-p)).toFixed(1)}" width="60" height="150" clip-path="url(#bc)" fill="url(#lq)"/><path d="${BP}" fill="url(#gl)" stroke="#123C32" stroke-opacity=".5" stroke-width="1.6"/><path d="M15 50v78" stroke="#fff" stroke-opacity=".7" stroke-width="4" stroke-linecap="round"/><g transform="translate(12 78) scale(1.5)" fill="none" stroke="#123C32" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${P.leaf}</g>`;
+const seg=(a,it,cur)=>`<div class="seg" role="tablist">${it.map((t,i)=>`<button role="tab" aria-selected="${i==cur}" class="${i==cur?'on':''}" data-a="${a}" data-i="${i}">${t}</button>`).join('')}</div>`;
+const head=t=>`<div class="top"><div class="lg"><i>${ic('rec',18)}</i>EcoBottle Loop</div><button class="ib" data-a="snd" aria-label="${S.snd?'Silencia el so':'Activa el so'}">${ic(S.snd?'vol':'mute')}</button></div>${t?`<h1>${t}</h1>`:''}`;
+const prog=(v,g)=>`<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${g}" aria-valuenow="${Math.min(v,g)}"><i style="width:${Math.min(1,v/g)*100}%"></i></div>`;
+/* ---------- pantalles ---------- */
+function home(){roll();const p=S.earned%R.step/R.step,s=ST[si];
+ const nodes=ST.map((x,i)=>{const a=(-90+i*72)*Math.PI/180,on=i==si;return `<g class="nd${on?' on':''}" data-a="st" data-i="${i}" tabindex="0" role="button" aria-pressed="${on}" aria-label="Etapa ${i+1}: ${x[0]}" transform="translate(${(160+128*Math.cos(a)).toFixed(1)} ${(160+128*Math.sin(a)).toFixed(1)})"><circle r="23"/><g transform="translate(-11 -11) scale(.92)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${P[x[1]]}</g></g>`}).join('');
+ return head(gr()+(S.name?', '+esc(S.name):''))+`<p class="sub">Cada ampolla té un cicle. Ajuda a tancar-lo.</p>
+<svg class="hero" viewBox="0 0 320 320" role="group" aria-label="Cicle circular de l’ampolla en cinc etapes"><circle cx="160" cy="160" r="150" fill="url(#ha)" opacity=".7"/><circle class="flow" cx="160" cy="160" r="128"/>${RM?'':'<circle r="5" fill="#18A878"><animateMotion dur="9s" repeatCount="indefinite" path="M160 32A128 128 0 1 1 159.9 32"/></circle>'}<g transform="translate(124 86) scale(1.2)">${bt(Math.max(.12,p))}</g>${nodes}</svg>
+<div class="card"><span class="pill">Etapa ${si+1} de 5</span><h2>${s[0]}</h2><p>${s[2]}</p></div>
+<p class="note">Explicació general del model d’economia circular. El procés concret d’EcoBottle és il·lustratiu i està pendent de validar.</p>
+<div class="stats"><div><b data-n="${bal()}" data-k="bal">${bal()}</b><span>punts</span></div><div><b data-n="${S.scans}" data-k="sc">${S.scans}</b><span>accions de demostració</span></div><div><b>${lv()}</b><span>nivell ${nm()}</span></div></div>
+<div class="card"><div class="row"><b>Nivell ${lv()}</b><span class="mut">${R.step-S.earned%R.step} punts per al nivell ${lv()+1}</span></div>${prog(S.earned%R.step,R.step)}</div>
+<div class="card"><div class="row"><b>Repte diari</b><span class="pill">${S.dd.b?'Completat':'+'+R.db+' punts'}</span></div><p>Registra ${R.dg} accions de demostració avui (${Math.min(S.dd.s,R.dg)}/${R.dg}).</p>${prog(S.dd.s,R.dg)}<button class="btn" data-a="to" data-t="1" data-s="0">Ves a l’escàner</button></div>
+<div class="grid4">${[['rec','Escàner',1,0],['book','Guia',1,1],['pin','Mapa',2,0],['star','Insígnies',3,2]].map(x=>`<button class="ib" style="width:100%;border-radius:18px;height:64px;flex-direction:column" data-a="to" data-t="${x[2]}" data-s="${x[3]}" aria-label="${x[1]}">${ic(x[0])}</button>`).join('')}</div>
+<div class="grid4" style="margin-top:4px"><small>Escàner</small><small>Guia</small><small>Mapa</small><small>Insígnies</small></div>`}
+function quizH(){const n=QZ.length;if(qv>=n){const ok=S.qa.filter((a,i)=>a==QZ[i][2]).length;return `<div class="card"><span class="pill">Resultat</span><h2>${ok} de ${n} correctes</h2><p>${ok>=5?'Molt bé! Domines les bases del cicle.':'Repassa la guia i torna-ho a provar. Els punts només es donen un cop per pregunta.'}</p><button class="btn" data-a="qr">Torna a començar</button></div>`}
+ const x=QZ[qv],an=S.qa[qv];return `<div class="card"><div class="row"><b>Pregunta ${qv+1} de ${n}</b><span class="pill">+${R.quiz} punts</span></div>${prog(qv,n)}<h2>${x[0]}</h2>${x[1].map((o,i)=>`<button class="opt${an!=null?(i==x[2]?' ok':i==an?' no':''):''}" data-a="qz" data-i="${i}"${an!=null?' disabled':''}>${o}${an!=null&&i==x[2]?'<span class="sr"> (resposta correcta)</span>':''}</button>`).join('')}${an!=null?`<p class="ex"><b>${an==x[2]?'Correcte.':'No exactament.'}</b> ${x[3]}</p><button class="btn" data-a="qn">${qv+1>=n?'Veure el resultat':'Següent'}</button>`:''}</div>`}
+function recicla(){roll();let b;
+ if(rs==0)b=`<div class="scn" id="sc"><span class="tg">Mode demostració</span><svg viewBox="-20 -20 100 190" height="220" aria-hidden="true">${bt(.7)}</svg><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><b class="ln"></b></div>
+<p class="note">Mode demostració: no s’utilitza la càmera ni es verifica cap producte real.</p><button class="btn" data-a="scan"${S.dd.s>=R.cap?' disabled':''}>Registra una acció de demostració</button><p class="mut">Avui: ${S.dd.s}/${R.cap} accions de demostració${S.dd.s>=R.cap?'. Has arribat al límit diari; torna demà.':'.'}</p>`;
+ else if(rs==1)b=`<div class="card"><h2>Guia de materials</h2><p class="mut">Recomanacions generals. Les normes depenen de la infraestructura local: consulta el teu ajuntament o servei de recollida.</p>${GM.map(g=>`<details><summary>${g[0]}</summary><p>${g[1]}</p></details>`).join('')}</div>`;
+ else b=quizH();
+ return head('Recicla')+seg('rs',['Escàner','Guia','Quiz'],rs)+b}
+const vis=()=>MP.map((p,i)=>({...p,i})).filter(p=>(fl=='Tots'||p.c.includes(fl))&&(p.n+' '+p.z).toLowerCase().includes(q.trim().toLowerCase()));
+const plist=()=>{const v=vis();return v.length?v.map(p=>`<button class="li${p.i==sel?' sel':''}" data-a="sel" data-i="${p.i}"><span class="ib">${ic('pin')}</span><span><b>${p.n}</b><small>${p.z} · ${p.c.join(', ')}</small></span><span class="mut">${ic('chev',18)}</span></button>`).join(''):'<p class="mut" style="text-align:center;padding:18px 0">Cap punt d’exemple coincideix amb la cerca.</p>'};
+function mapa(){const pins=MP.map((p,i)=>`<g class="pin" data-a="sel" data-i="${i}" tabindex="0" role="button" aria-label="${p.n}, ${p.z}" transform="translate(${p.x} ${p.y}) scale(${i==sel?1.3:1})"><path d="M0 0C-12-12-16-20-16-26a16 16 0 0 1 32 0c0 6-4 14-16 26z" fill="${p.c.length>1?'#123C32':p.c[0]=='Taps'?'#2AA9A0':'#18A878'}"/>${p.c.includes('Ampolles')?'<circle cy="-26" r="5" fill="#fff"/>':''}${p.c.includes('Taps')?'<rect x="-4" y="-30" width="8" height="8" fill="#fff" transform="'+(p.c.length>1?'translate(0 0)':'')+'"/>':''}</g>`).join('');
+ const d=sel>=0?`<div class="card"><span class="pill">Ubicació d’exemple · no verificada</span><h2>${MP[sel].n}</h2><p>${MP[sel].z}. Materials: ${MP[sel].c.join(' i ')} (dades de demostració).</p><a class="btn g" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query=punts+de+reciclatge">Cerca punts de recollida reals</a></div>`:'';
+ return head('Mapa')+`<p class="note" style="margin-top:0">Mapa il·lustratiu de demostració. Els punts són exemples inventats, no instal·lacions verificades i no hi ha dades de distància ni d’horaris.</p><svg class="map" viewBox="0 0 390 260" role="group" aria-label="Mapa il·lustratiu amb tres punts d’exemple"><path d="M390 80L310 170 240 250H390z" fill="#4CCDB544"/><rect x="40" y="14" width="120" height="50" rx="16" fill="#18A87822"/><path d="M0 110H390M0 170H280M90 0V260M210 0V230M290 0V110" stroke="var(--ln)" stroke-width="6" fill="none" stroke-linecap="round"/>${pins}</svg>
+<div class="chips" role="group" aria-label="Filtra per material">${['Tots','Ampolles','Taps'].map(c=>`<button class="chip${c==fl?' on':''}" data-a="chip" data-v="${c}" aria-pressed="${c==fl}">${c}</button>`).join('')}</div><input id="q" class="in" type="search" placeholder="Cerca un punt d’exemple" aria-label="Cerca un punt d’exemple" value="${esc(q)}"><div id="pl">${plist()}</div>${d}`}
+function chal(){return [['Repte diari','Registra '+R.dg+' accions de demostració avui.',S.dd.s,R.dg,'+'+R.db+' punts',S.dd.b],['Repte setmanal','Registra '+R.wg+' accions de demostració aquesta setmana.',S.ww.s,R.wg,'+'+R.wb+' punts',S.ww.b],['Objectiu d’aprenentatge','Respon bé 5 preguntes del quiz.',S.qp.length,5,'Insígnia',S.qp.length>=5]]}
+function recompenses(){roll();let b;
+ if(ws==0)b=RW.map(r=>{const own=S.rw.includes(r[0]),low=bal()<r[3];return `<div class="card"><div class="row" style="align-items:flex-start">${bdg(r[4],r[5],own||!low)}<div style="flex:1"><div class="row"><b>${r[1]}</b></div><p class="mut">${r[2]}</p><span class="pill">Demostració · ${r[3]} punts</span></div></div><button class="btn${own?' g':''}" data-a="buy" data-i="${r[0]}"${own||low?' disabled':''}>${own?'Aconseguida':low?`Et falten ${r[3]-bal()} punts`:'Bescanvia'}</button></div>`}).join('');
+ else if(ws==1)b=chal().map(c=>`<div class="card"><div class="row"><b>${c[0]}</b><span class="pill">${c[5]?'Completat':'En curs'}</span></div><p>${c[1]}</p>${prog(c[2],c[3])}<div class="row mut"><span>${Math.min(c[2],c[3])}/${c[3]}</span><span>Recompensa: ${c[4]}</span></div></div>`).join('');
+ else if(ws==2)b=`<p class="note">${S.bd.length} de ${B.length} insígnies aconseguides.</p><div class="grid2">${B.map(x=>{const on=S.bd.includes(x[0]);return `<div class="card" style="align-items:center;text-align:center">${bdg(x[3],x[4],on)}<b>${x[1]}</b><p>${x[2]}</p><span class="pill">${on?'Aconseguida':'Bloquejada'}</span></div>`}).join('')}</div>`;
+ else b=`<ul class="hl card">${S.H.map(h=>`<li><span>${esc(h.d)}<small>${fmt(h.t)}</small></span><b>${h.p>0?'+':'−'}${Math.abs(h.p)}</b></li>`).join('')}</ul>`;
+ return head('Recompenses')+`<div class="row"><div><div class="mut">Saldo</div><b style="font-size:46px;letter-spacing:-2px;line-height:1" data-n="${bal()}" data-k="bal2">${bal()}</b> <span class="mut">punts</span></div><span class="pill">Nivell ${lv()} · ${nm()}</span></div>${prog(S.earned%R.step,R.step)}<p class="note" style="margin-top:0">${R.step-S.earned%R.step} punts per al nivell ${lv()+1}. Les recompenses són exemples de demostració, sense lliurament real.</p>`+seg('ws',['Catàleg','Reptes','Insígnies','Historial'],ws)+b}
+function chart(){const d=dn(),a=[...Array(7)].map((_,i)=>[d-6+i,S.days[d-6+i]||0]),mx=Math.max(5,...a.map(x=>x[1]));return `<svg class="ch" viewBox="0 0 280 110" role="img" aria-label="Accions registrades els últims 7 dies: ${a.map(x=>x[1]).join(', ')}">${a.map((x,i)=>{const h=x[1]/mx*66;return `<rect x="${i*40+8}" y="${80-h}" width="24" height="${Math.max(h,3)}" rx="6" fill="${x[1]?'#18A878':'var(--ln)'}"/><text x="${i*40+20}" y="98" text-anchor="middle">${new Date(x[0]*864e5+432e5).toLocaleDateString('ca',{weekday:'short',timeZone:'UTC'})}</text>${x[1]?`<text x="${i*40+20}" y="${74-h}" text-anchor="middle">${x[1]}</text>`:''}`}).join('')}</svg>`}
+function perfil(){return head('')+`<div class="row" style="justify-content:flex-start"><div class="av">${S.name?esc([...S.name][0].toUpperCase()):ic('leaf',32)}</div><div><h1 style="margin:0;font-size:28px">${S.name?esc(S.name):'Sense nom'}</h1><span class="mut">Nivell ${lv()} · ${nm()}</span></div></div><button class="btn g" data-a="name">Edita el nom</button>
+<div class="stats"><div><b>${S.earned}</b><span>punts acumulats</span></div><div><b>${S.scans}</b><span>accions</span></div><div><b>${stk()}</b><span>dies de ratxa</span></div></div>
+<div class="card"><b>Activitat dels últims 7 dies</b><p class="mut">Accions de demostració registrades a l’app. No són mesures d’impacte ambiental.</p>${chart()}</div>
+<div class="card"><b>Insígnies i recompenses</b><p class="mut">${S.bd.length} de ${B.length} insígnies · ${S.rw.length} de ${RW.length} recompenses de demostració</p></div>
+<div class="card"><div class="row"><span><b>So</b><br><span class="mut">Efectes sonors discrets</span></span><button class="sw" role="switch" aria-checked="${!!S.snd}" aria-label="So" data-a="snd"><i></i></button></div></div>
+<div class="card"><b>Tema</b>${seg('th',['Automàtic','Clar','Fosc'],['auto','light','dark'].indexOf(S.th))}<p class="mut">Les animacions s’adapten a la preferència de moviment reduït del teu dispositiu.</p></div>
+<div class="card"><b>Mode de demostració</b><p class="mut">Aquesta app és un projecte acadèmic. L’escàner és una simulació, els punts de recollida i les recompenses són exemples, i els punts inicials són de demostració.</p></div>
+<div class="card"><b>Privacitat</b><p class="mut">No cal compte ni correu. Les dades es guarden només en aquest dispositiu i no s’envien enlloc.</p></div>
+<button class="btn dng" data-a="reset">Reinicia el progrés</button>`}
+const SCR=[home,recicla,mapa,recompenses,perfil],TT=['Inici','Recicla','Mapa','Recompenses','Perfil'],TI=['home','rec','pin','trophy','user'];
+NV.innerHTML='<i></i>'+TT.map((t,i)=>`<button data-a="to" data-t="${i}" aria-label="${t}">${ic(TI[i],24)}<span>${t}</span></button>`).join('');
+function render(){const y=M.scrollTop;M.innerHTML=SCR[tab]();M.scrollTop=y;NV.style.setProperty('--t',tab);NV.querySelectorAll('button').forEach((b,i)=>{b.classList.toggle('on',i==tab);i==tab?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current')});
+ M.querySelectorAll('[data-n]').forEach(e=>{const to=+e.dataset.n,k=e.dataset.k,from=PV[k]??to;PV[k]=to;if(RM||from==to)return;const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/600);e.textContent=Math.round(from+(to-from)*p);if(p<1)requestAnimationFrame(f)})(t0)})}
+/* ---------- accions ---------- */
+function doScan(){roll();const b=lv(),l=[];S.dd.s++;S.ww.s++;S.scans++;S.days[dn()]=(S.days[dn()]||0)+1;
+ const ks=Object.keys(S.days);if(ks.length>14)ks.sort((a,c)=>a-c).slice(0,ks.length-14).forEach(k=>delete S.days[k]);
+ add('scan','Acció de demostració registrada',R.scan);l.push(`<b>+${R.scan} punts</b> per l’acció registrada`);
+ if(S.dd.s>=R.dg&&!S.dd.b){S.dd.b=1;S.dc++;add('bonus','Repte diari completat',R.db);l.push(`Repte diari completat: <b>+${R.db} punts</b>`)}else l.push(`Repte diari: ${Math.min(S.dd.s,R.dg)}/${R.dg}`);
+ if(S.ww.s>=R.wg&&!S.ww.b){S.ww.b=1;S.wc++;add('bonus','Repte setmanal completat',R.wb);l.push(`Repte setmanal completat: <b>+${R.wb} punts</b>`)}else l.push(`Repte setmanal: ${Math.min(S.ww.s,R.wg)}/${R.wg}`);
+ if(lv()>b)l.push(`<b>Has pujat al nivell ${lv()}!</b>`);l.push(`Límit diari: ${S.dd.s}/${R.cap}`);save();return l}
+const A={
+ to(b,d){tab=+d.t;if(d.s!=null){if(tab==1)rs=+d.s;if(tab==3)ws=+d.s}M.classList.remove('in');void M.offsetWidth;render();M.scrollTop=0;M.classList.add('in')},
+ st(b,d){si=+d.i;if(!S.seen.includes(si))S.seen.push(si);check();save();render();sfx('pop');const n=M.querySelector('.nd.on');n&&n.focus()},
+ rs(b,d){rs=+d.i;render()},ws(b,d){ws=+d.i;render()},chip(b,d){fl=d.v;render()},sel(b,d){sel=sel==+d.i?-1:+d.i;render()},
+ th(b,d){S.th=['auto','light','dark'][+d.i];applyTh();save();render()},
+ snd(){S.snd=S.snd?0:1;save();render();sfx('tick');toast(S.snd?'So activat':'So desactivat')},
+ scan(b){if(busy)return;roll();if(S.dd.s>=R.cap){sfx('bad');toast('Has arribat al límit diari de demostració.');return}busy=1;b.disabled=true;b.setAttribute('aria-busy','true');const c=$('#sc');c&&c.classList.add('go');sfx('pop');
+  setTimeout(()=>{busy=0;const l=doScan();check();render();sfx('ok');modal(`<h3 id="mt">Acció registrada</h3><p>Has registrat una <b>acció de demostració</b>: un lliurament simulat d’una ampolla. No s’ha verificat cap producte ni cap reciclatge real.</p><ul>${l.map(x=>`<li>${x}</li>`).join('')}</ul>`,[['Torna a l’escàner',cm],['Veure l’historial',()=>{cm();ws=3;A.to(null,{t:3})},1]])},RM?150:1300)},
+ qz(b,d){const x=QZ[qv];if(!x||S.qa[qv]!=null)return;const i=+d.i,ok=i==x[2];S.qa[qv]=i;if(ok&&!S.qp.includes(qv)){S.qp.push(qv);add('quiz','Quiz: resposta correcta',R.quiz)}save();check();render();sfx(ok?'ok':'bad')},
+ qn(){qv++;render()},qr(){S.qa=[];qv=0;save();render()},
+ buy(b,d){const r=RW.find(x=>x[0]==d.i);if(!r||S.rw.includes(r[0])||bal()<r[3])return;modal(`<h3 id="mt">Confirma el bescanvi</h3><p>Vols bescanviar <b>${r[1]}</b> per ${r[3]} punts?</p><p class="mut">Recompensa de demostració: no hi ha cap lliurament real.</p>`,[['Bescanvia',()=>{cm();if(S.rw.includes(r[0])||bal()<r[3]){sfx('bad');return}S.rw.push(r[0]);add('buy','Bescanvi: '+r[1],-r[3]);check();save();render();sfx('ok');toast('Has bescanviat: '+r[1])}],['Cancel·la',cm,1]])},
+ name(){askName(false)},
+ reset(){modal(`<h3 id="mt">Reiniciar el progrés?</h3><p>S’eliminaran els punts, l’historial, les insígnies, les recompenses i el progrés del quiz d’aquest dispositiu. Es conservaran el nom i les preferències. No es pot desfer.</p>`,[['Sí, reinicia',()=>{S=Object.assign(def(),{name:S.name,snd:S.snd,th:S.th,ask:1});qv=0;sel=-1;save();cm();render();toast('Progrés reiniciat')}],['Cancel·la',cm,1]])}};
+function askName(first){modal(`<h3 id="mt">${first?'Benvingut a EcoBottle Loop':'El teu nom'}</h3><p>${first?'Pots posar-hi un nom, però és opcional. Les dades es queden només en aquest dispositiu.':'Edita el teu nom o deixa’l buit.'}</p><input id="ni" class="in" maxlength="18" autocomplete="off" placeholder="El teu nom (opcional)" value="${esc(S.name)}" aria-label="El teu nom">`,[['Desa',()=>{S.name=$('#ni').value.trim().slice(0,18);S.ask=1;save();cm();render();sfx('ok')}],[first?'Continua sense nom':'Cancel·la',()=>{S.ask=1;save();cm()},1]])}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a],[data-m]');if(!b)return;if(b.dataset.m!=null){const f=MB[+b.dataset.m];f&&f[1]();return}if(b.disabled)return;const a=b.dataset.a;if(!['scan','snd','qz','buy'].includes(a))sfx('tick');A[a]&&A[a](b,b.dataset)});
+document.addEventListener('keydown',e=>{const t=e.target;if((e.key=='Enter'||e.key==' ')&&t.matches&&t.matches('g[data-a]')){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}
+ if(e.key=='Escape'&&!$('#md').hidden)cm();if(e.key=='Enter'&&t.id=='ni')MB[0][1]()});
+document.addEventListener('input',e=>{if(e.target.id=='q'){q=e.target.value;$('#pl').innerHTML=plist()}});
+render();if(!S.ask)askName(true);
+})();
+</script>
+</body>
+</html>
